@@ -1,0 +1,7 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+problems/Q*
+
+# on mac environment
+.DS_Store

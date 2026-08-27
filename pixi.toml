@@ -1,0 +1,11 @@
+[workspace]
+authors = ["sutanry03 <sutanry03@gmail.com>"]
+channels = ["https://conda.modular.com/max", "conda-forge"]
+name = "mojo_slitherlink"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+mojo = ">=1.0.0,<2"
