@@ -51,24 +51,23 @@ def install_board() raises -> Board:
     var h: Int = size[0]
     var w: Int = size[1]
 
+    var row: List[Int] = [-1 for _k in range(w)]
+    var row_excess: List[Int] = [-1 for _k in range(w+1)]
     for line in lines[1:]:
         var row_n: List[Int] = [Int(j) if j else -1 for j in line.split(",")]
         n.append(row_n^)
-        var row: List[Int] = [-1 for _k in range(w)]
-        var row_excess: List[Int] = [-1 for _k in range(w+1)]
-        x.append(row.copy())
-        y.append(row_excess.copy())
-        p.append(row_excess.copy())
         var flgs: List[Bool] = [False for _k in range(w)]
         f.append(flgs^)
 
+        x.append(row.copy())
+        y.append(row_excess.copy())
+        p.append(row_excess.copy())
         l["x"].append(row.copy())
         l["y"].append(row_excess.copy())
-    var bottom: List[Int] = [-1 for _k in range(w)]
-    x.append(bottom.copy())
-    l["x"].append(bottom.copy())
-    var bottom_excess: List[Int] = [-1 for _k in range(w+1)]
-    p.append(bottom_excess.copy())
+
+    x.append(row.copy())
+    l["x"].append(row.copy())
+    p.append(row_excess.copy())
 
     file.close()
     return Board(h, w, p^, x^, y^, n^, f^, l^)
@@ -113,11 +112,16 @@ def numbers_and_points(var board_map: Board) raises -> Board:
     print_board(board_map)
     board_map = simple_points(board_map^)
     print_board(board_map)
-    board_map = simple_loops(board_map^)
-    print_board(board_map)
-
     if board_map.b:
         print("Retake numbers&points set.")
+        board_map.b = False
+        board_map = numbers_and_points(board_map^)
+    else:
+        print("Through numbers&points set. Begin loop_check.")
+        board_map = simple_loops(board_map^)
+        print_board(board_map)
+    if board_map.b:
+        print("Change detected. Retake trio set.")
         board_map.b = False
         board_map = numbers_and_points(board_map^)
     return board_map^
@@ -126,6 +130,6 @@ def main() raises:
     # install question
     var board_map: Board = install_board()
     print_board(board_map)
-    var loops_list: List[Ring] = []
     board_map = numbers_and_points(board_map^)
+    print("Through simple-trio set.")
     print(board_map.h, board_map.w, len(board_map.r))
