@@ -1,4 +1,4 @@
-from main import Board, update_and_countup_otherwise_not as u
+from src.solve import Board, update_and_countup_otherwise_not as u
 
 struct Ring(Copyable, Equatable):
     var w: Int
@@ -102,9 +102,6 @@ def simple_loops(var b: Board) raises -> Board:
 
     # initialy extend exisiting rings
     for i in range(len(b.r)):
-        print(b.r[i].i1, b.r[i].j1, b.r[i].d1)
-        print(b.r[i].i2, b.r[i].j2, b.r[i].d2)
-        print("↓")
         while True:
             var judge = extend_ring(b, b.r[i].i1, b.r[i].j1, b.r[i].d1)
             if judge: break
@@ -112,8 +109,6 @@ def simple_loops(var b: Board) raises -> Board:
             var judge = extend_ring(b, b.r[i].i2, b.r[i].j2, b.r[i].d2)
             if judge: break
         b.r[i].close = b.r[i].check_connection()
-        print(b.r[i].i1, b.r[i].j1, b.r[i].d1)
-        print(b.r[i].i2, b.r[i].j2, b.r[i].d2)
 
     var ti1: Int
     var tj1: Int
@@ -136,6 +131,7 @@ def simple_loops(var b: Board) raises -> Board:
                     if judge: break
                 var result: Ring = Ring(b.w, ti1, tj1, td1, ti2, tj2, td2)
                 for n, r in enumerate(b.r):
+                    # in ver 1.0, "_ListIter[...] .Element" does NOT NEED to be fixed despite the LSP error.
                     if result != r:
                         continue
                     else:
