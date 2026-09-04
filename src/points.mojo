@@ -1,4 +1,4 @@
-from main import Board, update_and_countup_otherwise_not as u
+from src.solve import Board, update_and_countup_otherwise_not as u
 
 def simple_points(var b: Board) raises -> Board:
     var cnt: Bool = False

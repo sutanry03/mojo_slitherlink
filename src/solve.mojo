@@ -1,6 +1,6 @@
-from numbers import zero, one, two, three, simple_numbering
-from points import simple_points
-from loops import Ring, simple_loops
+from src.numbers import simple_numbering
+from src.points import simple_points
+from src.loops import Ring, simple_loops
 
 struct Board:
     var h: Int                           # height of board
@@ -102,7 +102,7 @@ def print_board(b: Board) raises -> None:
     print()
 
 def update_and_countup_otherwise_not(mut v: Int, mut c: Bool, desire: Int):
-    var diff: Bool = (v != desire)
+    var diff: Bool = (v < 0 and v != desire)
     if diff:
         v = desire
     c = c or diff
@@ -126,7 +126,7 @@ def numbers_and_points(var board_map: Board) raises -> Board:
         board_map = numbers_and_points(board_map^)
     return board_map^
 
-def main() raises:
+def solve() raises:
     # install question
     var board_map: Board = install_board()
     print_board(board_map)
