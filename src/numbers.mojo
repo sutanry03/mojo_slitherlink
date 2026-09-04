@@ -1,4 +1,5 @@
 from src.solve import Board, update_and_countup_otherwise_not as u
+from src.signs.common import check_io
 from src.signs.one import first
 from src.signs.two import second
 from src.signs.three import third
@@ -23,6 +24,10 @@ def simple_numbering(var b: Board) raises -> Board:
                 xedge = j // (b.w-1)
             var temp: Bool = treat[b.n[i][j]](b, i, j, xedge, yedge)
             cnt = cnt or temp
+            #io check
+            if b.io[i][j] is None:
+                check_io(b, cnt, i, j)
+
     if cnt:
         b.b = True
         print("Iteration (numbers) begin.")

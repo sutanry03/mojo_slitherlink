@@ -26,15 +26,23 @@ def first(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
     if diag[0] == 1:
         u(b.x[i+1][j] ,c ,0)
         u(b.y[i][j] ,c ,0)
+        if b.x[i][j]   in [0,1]:u(b.y[i][j+1], c, 1-b.x[i][j])
+        if b.y[i][j+1] in [0,1]:u(b.x[i][j],   c, 1-b.y[i][j+1])
     if diag[1] == 1:
         u(b.x[i+1][j] ,c ,0)
         u(b.y[i][j+1] ,c ,0)
+        if b.x[i][j]   in [0,1]:u(b.y[i][j],   c, 1-b.x[i][j])
+        if b.y[i][j]   in [0,1]:u(b.x[i][j],   c, 1-b.y[i][j])
     if diag[2] == 1:
         u(b.x[i][j] ,c ,0)
         u(b.y[i][j+1] ,c ,0)
+        if b.x[i+1][j] in [0,1]:u(b.y[i][j],   c, 1-b.x[i+1][j])
+        if b.y[i][j]   in [0,1]:u(b.x[i+1][j], c, 1-b.y[i][j])
     if diag[3] == 1:
         u(b.x[i][j] ,c ,0)
         u(b.y[i][j] ,c ,0)
+        if b.x[i+1][j] in [0,1]:u(b.y[i][j+1], c, 1-b.x[i+1][j])
+        if b.y[i][j+1] in [0,1]:u(b.x[i+1][j], c, 1-b.y[i][j+1])
 
     var tf: Bool = check_cell(b, i, j, 1)
     c = (c or tf)

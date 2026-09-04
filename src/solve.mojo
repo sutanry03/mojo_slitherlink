@@ -13,17 +13,19 @@ struct Board:
     var b: Bool                          # bool for record update or not
     var l: Dict[String, List[List[Int]]] # loops numbers belongs to.
     var r: List[Ring]                    # rings catalog.
+    var io: List[List[Optional[Bool]]]   # record whether In or Out.
 
     def __init__(
         out self,
-        var h: Int,
-        var w: Int,
-        var p: List[List[Int]],
-        var x: List[List[Int]],
-        var y: List[List[Int]],
-        var n: List[List[Int]],
-        var f: List[List[Bool]],
-        var l: Dict[String, List[List[Int]]]
+        var h:  Int,
+        var w:  Int,
+        var p:  List[List[Int]],
+        var x:  List[List[Int]],
+        var y:  List[List[Int]],
+        var n:  List[List[Int]],
+        var f:  List[List[Bool]],
+        var l:  Dict[String, List[List[Int]]],
+        var io: List[List[Optional[Bool]]]
     ):
         self.h = h
         self.w = w
@@ -35,14 +37,16 @@ struct Board:
         self.b = False
         self.l = l^
         self.r = []
+        self.io = io^
 
 def install_board() raises -> Board:
-    var p: List[List[Int]] = []
-    var x: List[List[Int]] = []
-    var y: List[List[Int]] = []
-    var n: List[List[Int]] = []
-    var f: List[List[Bool]] = []
-    var l: Dict[String, List[List[Int]]] = {"x":[], "y":[]}
+    var p:  List[List[Int]] = []
+    var x:  List[List[Int]] = []
+    var y:  List[List[Int]] = []
+    var n:  List[List[Int]] = []
+    var f:  List[List[Bool]] = []
+    var l:  Dict[String, List[List[Int]]] = {"x":[], "y":[]}
+    var io: List[List[Optional[Bool]]] = []
 
     var file = open("problems/problem.txt", "r")
     var text: String = file.read()
@@ -53,6 +57,7 @@ def install_board() raises -> Board:
 
     var row: List[Int] = [-1 for _k in range(w)]
     var row_excess: List[Int] = [-1 for _k in range(w+1)]
+    var row_io: List[Optional[Bool]] = [None for _k in range(w)]
     for line in lines[1:]:
         var row_n: List[Int] = [Int(j) if j else -1 for j in line.split(",")]
         n.append(row_n^)
@@ -64,13 +69,14 @@ def install_board() raises -> Board:
         p.append(row_excess.copy())
         l["x"].append(row.copy())
         l["y"].append(row_excess.copy())
+        io.append(row_io.copy())
 
     x.append(row.copy())
     l["x"].append(row.copy())
     p.append(row_excess.copy())
 
     file.close()
-    return Board(h, w, p^, x^, y^, n^, f^, l^)
+    return Board(h, w, p^, x^, y^, n^, f^, l^, io^)
 
 def print_board(b: Board) raises -> None:
     var disp_x: Dict[Int, String] = {-1:" ", 0:"x", 1:"-", -2: "?"}
