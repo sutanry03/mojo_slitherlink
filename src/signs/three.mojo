@@ -27,33 +27,33 @@ def third(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises-> Bool:
         u(b.x[i+1][j] ,c ,1)
         u(b.y[i][j] ,c ,1)
         if diag[0] == -3:
-            if j < b.w - 1 and b.x[i][j+1] == -1:
+            if j < b.w - 1 and b.x[i][j+1] <= -1:
                 u(b.x[i][j+1] ,c ,0)
-            if i != 0 and b.y[i-1][j+1] == -1:
+            if i != 0 and b.y[i-1][j+1] <= -1:
                 u(b.y[i-1][j+1] ,c ,0)
     if diag[1] in [1, -3]:
         u(b.x[i+1][j] ,c ,1)
         u(b.y[i][j+1] ,c ,1)
         if diag[1] == -3:
-            if j != 0 and b.x[i][j-1] == -1:
+            if j != 0 and b.x[i][j-1] <= -1:
                 u(b.x[i][j-1] ,c ,0)
-            if i != 0 and b.y[i-1][j] == -1:
+            if i != 0 and b.y[i-1][j] <= -1:
                 u(b.y[i-1][j] ,c ,0)
     if diag[2] in [1, -3]:
         u(b.x[i][j] ,c ,1)
         u(b.y[i][j+1] ,c ,1)
         if diag[2] == -3:
-            if j != 0 and b.x[i+1][j-1] == -1:
+            if j != 0 and b.x[i+1][j-1] <= -1:
                 u(b.x[i+1][j-1] ,c ,0)
-            if i < b.h-1 and b.y[i+1][j] == -1:
+            if i < b.h-1 and b.y[i+1][j] <= -1:
                 u(b.y[i+1][j] ,c ,0)
     if diag[3] in [1, -3]:
         u(b.x[i][j] ,c ,1)
         u(b.y[i][j] ,c ,1)
         if diag[3] == -3:
-            if j < b.w-1 and b.x[i+1][j+1] == -1:
+            if j < b.w-1 and b.x[i+1][j+1] <= -1:
                 u(b.x[i+1][j+1] ,c ,0)
-            if i < b.h-1 and b.y[i+1][j+1] == -1:
+            if i < b.h-1 and b.y[i+1][j+1] <= -1:
                 u(b.y[i+1][j+1] ,c ,0)
 
     # 3-3pair
