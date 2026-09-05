@@ -100,15 +100,37 @@ def simple_loops(var b: Board) raises -> Board:
                 return False
         return True
 
-    # initialy extend exisiting rings
+    # initialy extend exisiting rings and reflesh linup
+    var newlist: List[Ring] = []
     for i in range(len(b.r)):
+        var init1: Tuple[Int, Int] = (b.r[i].i1, b.r[i].j1)
+        var init2: Tuple[Int, Int] = (b.r[i].i2, b.r[i].j2)
+
         while True:
             var judge = extend_ring(b, b.r[i].i1, b.r[i].j1, b.r[i].d1)
             if judge: break
+            if init1 == (b.r[i].i1, b.r[i].j1):
+                b.r[i].i2 = b.r[i].i1
+                b.r[i].j2 = b.r[i].j1
+                break
         while True:
             var judge = extend_ring(b, b.r[i].i2, b.r[i].j2, b.r[i].d2)
             if judge: break
+            if init2 == (b.r[i].i2, b.r[i].j2):
+                b.r[i].i1 = b.r[i].i2
+                b.r[i].j1 = b.r[i].j2
+                break
         b.r[i].close = b.r[i].check_connection()
+        if b.r[i].close == 5:
+            print("LOOPED.")
+            return b^
+        #_ListIter[...].Element does not need to be fixed.
+        if all([b.r[i] != newone for newone in newlist]):
+            newlist.append(Ring(
+                b.r[i].w, b.r[i].i1, b.r[i].j1, b.r[i].d1,
+                b.r[i].i2, b.r[i].j2, b.r[i].d2
+            ))
+    b.r = newlist^
 
     var ti1: Int
     var tj1: Int
