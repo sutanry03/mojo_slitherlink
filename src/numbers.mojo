@@ -1,12 +1,12 @@
 from src.solve import Board, update_and_countup_otherwise_not as u
-from src.signs.common import check_io
+from src.signs.common import check_io, diagonal_neighbors
 from src.signs.one import first
 from src.signs.two import second
 from src.signs.three import third
 
 def simple_numbering(var b: Board) raises -> Board:
     var treat: Dict[Int, def(mut Board, Int, Int, Int, Int) thin raises -> Bool] = {
-        -1:skip_non_number,
+        -1:non_number,
         0:zero, 1:first, 2:second, 3:third
     }
     var cnt: Bool = False
@@ -34,8 +34,92 @@ def simple_numbering(var b: Board) raises -> Board:
         b = simple_numbering(b^)
     return b^
 
-def skip_non_number(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
-    return False
+def non_number(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
+    var c: Bool = False
+    var diag: Tuple[Int, Int, Int, Int] = diagonal_neighbors(b, i, j)
+    if diag[0] == 0 and b.x[i+1][j] == 1 and b.y[i][j] == 1:
+        u(b.x[i][j], c, 0)
+        u(b.y[i][j+1], c, 0)
+    if diag[1] == 0 and b.x[i+1][j] == 1 and b.y[i][j+1] == 1:
+        u(b.x[i][j], c, 0)
+        u(b.y[i][j], c, 0)
+    if diag[2] == 0 and b.x[i][j] == 1 and b.y[i][j+1] == 1:
+        u(b.x[i+1][j], c, 0)
+        u(b.y[i][j], c, 0)
+    if diag[3] == 0 and b.x[i][j] == 1 and b.y[i][j] == 1:
+        u(b.x[i+1][j], c, 0)
+        u(b.y[i][j+1], c, 0)
+
+    if diag[0] == 0 and diag[1] == 0:
+        if diag[2] in [-3, 1]:
+            if i != b.h-1 and j != b.w-1:
+                if b.n[i+1][j+1] == 1:
+                    u(b.x[i+2][j+1], c, 0)
+                    u(b.y[i+1][j+2], c, 0)
+                if b.n[i+1][j+1] == 3:
+                    u(b.x[i+2][j+1], c, 1)
+                    u(b.y[i+1][j+2], c, 1)
+        if diag[3] in [-3, 1]:
+            if i != b.h-1 and j != 0:
+                if b.n[i+1][j-1] == 1:
+                    u(b.x[i+2][j-1], c, 0)
+                    u(b.y[i+1][j-1], c, 0)
+                if b.n[i+1][j-1] == 3:
+                    u(b.x[i+2][j-1], c, 1)
+                    u(b.y[i+1][j-1], c, 1)
+    if diag[1] == 0 and diag[2] == 0:
+        if diag[0] in [-3, 1]:
+            if i != b.h-1 and j != b.w-1:
+                if b.n[i+1][j+1] == 1:
+                    u(b.x[i+2][j+1], c, 0)
+                    u(b.y[i+1][j+2], c, 0)
+                if b.n[i+1][j+1] == 3:
+                    u(b.x[i+2][j+1], c, 1)
+                    u(b.y[i+1][j+2], c, 1)
+        if diag[3] in [-3, 1]:
+            if i != 0 and j != b.w-1:
+                if b.n[i-1][j+1] == 1:
+                    u(b.x[i-1][j+1], c, 0)
+                    u(b.y[i-1][j+2], c, 0)
+                if b.n[i-1][j+1] == 3:
+                    u(b.x[i-1][j+1], c, 1)
+                    u(b.y[i-1][j+2], c, 1)
+    if diag[2] == 0 and diag[3] == 0:
+        if diag[0] in [-3, 1]:
+            if i != 0 and j != 0:
+                if b.n[i-1][j-1] == 1:
+                    u(b.x[i-1][j-1], c, 0)
+                    u(b.y[i-1][j-1], c, 0)
+                if b.n[i-1][j-1] == 3:
+                    u(b.x[i-1][j-1], c, 1)
+                    u(b.y[i-1][j-1], c, 1)
+        if diag[1] in [-3, 1]:
+            if i != 0 and j != b.w-1:
+                if b.n[i-1][j+1] == 1:
+                    u(b.x[i-1][j+1], c, 0)
+                    u(b.y[i-1][j+2], c, 0)
+                if b.n[i-1][j+1] == 3:
+                    u(b.x[i-1][j+1], c, 1)
+                    u(b.y[i-1][j+2], c, 1)
+    if diag[3] == 0 and diag[0] == 0:
+        if diag[1] in [-3, 1]:
+            if i != b.h-1 and j != 0:
+                if b.n[i+1][j-1] == 1:
+                    u(b.x[i+2][j-1], c, 0)
+                    u(b.y[i+1][j-1], c, 0)
+                if b.n[i+1][j-1] == 3:
+                    u(b.x[i+2][j-1], c, 1)
+                    u(b.y[i+1][j-1], c, 1)
+        if diag[2] in [-3, 1]:
+            if i != 0 and j != 0:
+                if b.n[i-1][j-1] == 1:
+                    u(b.x[i-1][j-1], c, 0)
+                    u(b.y[i-1][j-1], c, 0)
+                if b.n[i-1][j-1] == 3:
+                    u(b.x[i-1][j-1], c, 1)
+                    u(b.y[i-1][j-1], c, 1)
+
+    return c
 
 def zero(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
     if b.f[i][j]:

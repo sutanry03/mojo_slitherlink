@@ -26,7 +26,7 @@ struct Ring(Copyable, Equatable):
         var s2 = self.i2 * self.w + self.j2
         var t1 = ot.i1 * ot.w + ot.j1
         var t2 = ot.i2 * ot.w + ot.j2
-        return min(s1,s2) == min(t1,t2) and  max(s1,s2) == max(t1,t2)
+        return min(s1,s2) == min(t1,t2) and max(s1,s2) == max(t1,t2)
 
     def check_connection(self) raises -> Int:
         """ Return an Integer indicates direction when both edge are nearest neighbor each other."""
@@ -130,6 +130,8 @@ def simple_loops(var b: Board) raises -> Board:
                 b.r[i].w, b.r[i].i1, b.r[i].j1, b.r[i].d1,
                 b.r[i].i2, b.r[i].j2, b.r[i].d2
             ))
+            var t: Ring = newlist[len(newlist) -1].copy()
+            print(t.i1, t.j1, t.d1, t.i2, t.j2, t.d2, t.close)
     b.r = newlist^
 
     var ti1: Int
@@ -233,13 +235,13 @@ def simple_loops(var b: Board) raises -> Board:
 
     for i in range(len(b.r)):
         var cc: Int = b.r[i].close
-        if cc == 1 and b.x[b.r[i].i1][min(b.r[i].j1, b.r[i].j2)] == -1:
+        if cc == 1 and b.x[b.r[i].i1][min(b.r[i].j1, b.r[i].j2)] <= -1:
             u(b.x[b.r[i].i1][min(b.r[i].j1, b.r[i].j2)], c, 0)
-        if cc == 2 and b.y[min(b.r[i].i1, b.r[i].i2)][b.r[i].j1] == -1:
+        if cc == 2 and b.y[min(b.r[i].i1, b.r[i].i2)][b.r[i].j1] <= -1:
             u(b.y[min(b.r[i].i1, b.r[i].i2)][b.r[i].j1], c, 0)
-        if cc == 3 and b.x[b.r[i].i1][min(b.r[i].j1, b.r[i].j2)] == -1:
+        if cc == 3 and b.x[b.r[i].i1][min(b.r[i].j1, b.r[i].j2)] <= -1:
             u(b.x[b.r[i].i1][min(b.r[i].j1, b.r[i].j2)], c, 0)
-        if cc == 4 and b.y[min(b.r[i].i1, b.r[i].i2)][b.r[i].j1] == -1:
+        if cc == 4 and b.y[min(b.r[i].i1, b.r[i].i2)][b.r[i].j1] <= -1:
             u(b.y[min(b.r[i].i1, b.r[i].i2)][b.r[i].j1], c, 0)
     b.b = c
     return b^

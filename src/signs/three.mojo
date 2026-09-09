@@ -56,7 +56,62 @@ def third(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises-> Bool:
             if i < b.h-1 and b.y[i+1][j+1] <= -1:
                 u(b.y[i+1][j+1] ,c ,0)
 
-    # 3-3pair
+    # line will be in the cell from diag neighbors.
+    if diag[0] == -4:
+        u(b.x[i+1][j], c, 1)
+        u(b.y[i][j], c, 1)
+    if diag[1] == -4:
+        u(b.x[i+1][j], c, 1)
+        u(b.y[i][j+1], c, 1)
+    if diag[2] == -4:
+        u(b.x[i][j], c, 1)
+        u(b.y[i][j+1], c, 1)
+    if diag[3] == -4:
+        u(b.x[i][j], c, 1)
+        u(b.y[i][j], c, 1)
+
+    if diag[0] == -8:
+        u(b.x[i][j],   c, 1)
+        u(b.y[i][j+1], c, 1)
+        if b.x[i+1][j] in [0,1]:
+            u(b.y[i][j],   c, 1-b.x[i+1][j])
+        elif b.y[i][j] in [0,1]:
+            u(b.x[i+1][j], c, 1-b.y[i][j])
+        else:
+            u(b.x[i+1][j], c, -3)
+            u(b.y[i][j],   c, -3)
+    if diag[2] == -8:
+        u(b.x[i+1][j], c, 1)
+        u(b.y[i][j],   c, 1)
+        if b.x[i][j] in [0,1]:
+            u(b.y[i][j+1], c, 1-b.x[i][j])
+        elif b.y[i][j+1] in [0,1]:
+            u(b.x[i][j],   c, 1-b.y[i][j+1])
+        else:
+            u(b.x[i][j],   c, -3)
+            u(b.y[i][j+1], c, -3)
+    if diag[1] == -6:
+        u(b.x[i][j], c, 1)
+        u(b.y[i][j], c, 1)
+        if b.x[i+1][j] in [0,1]:
+            u(b.y[i][j+1], c, 1-b.x[i+1][j])
+        elif b.y[i][j+1] in [0,1]:
+            u(b.x[i+1][j], c, 1-b.y[i][j+1])
+        else:
+            u(b.x[i+1][j], c, -3)
+            u(b.y[i][j+1], c, -3)
+    if diag[3] == -6:
+        u(b.x[i+1][j], c, 1)
+        u(b.y[i][j+1], c, 1)
+        if b.x[i][j] in [0,1]:
+            u(b.y[i][j], c, 1-b.x[i][j])
+        elif b.y[i][j] in [0,1]:
+            u(b.x[i][j], c, 1-b.y[i][j])
+        else:
+            u(b.x[i][j], c, -3)
+            u(b.y[i][j], c, -3)
+
+    # 3-3pair (not diag neighbor)
     if i != 0 and b.n[i-1][j] == 3:
         u(b.x[i-1][j], c, 1)
         u(b.x[i][j],   c, 1)
@@ -90,6 +145,30 @@ def third(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises-> Bool:
         if i != b.h - 1:
             u(b.y[i+1][j+1], c, 0)
 
+    # 3-3 diag pair
+    if i != 0 and j != b.w-1 and b.n[i-1][j+1] == 3:
+        u(b.x[i+1][j], c, 1)
+        u(b.y[i][j],   c, 1)
+        u(b.x[i-1][j+1], c, 1)
+        u(b.y[i-1][j+2], c, 1)
+        if i == 1 and j == 0:
+            u(b.x[0][0], c, 0)
+            u(b.y[0][0], c, 0)
+        if i == b.h-1 and j == b.w-2:
+            u(b.x[b.h][b.w-1], c, 0)
+            u(b.y[b.h-1][b.w], c, 0)
+    if i != 0 and j != 0 and b.n[i-1][j-1] == 3:
+        u(b.x[i-1][j-1], c, 1)
+        u(b.y[i-1][j-1], c, 1)
+        u(b.x[i+1][j], c, 1)
+        u(b.y[i][j+1], c, 1)
+        if i == 1 and j == b.w-1:
+            u(b.x[0][b.w-1], c, 0)
+            u(b.y[0][b.w], c, 0)
+        if i == b.h-1 and j == 1:
+            u(b.x[b.h][0], c, 0)
+            u(b.y[b.h-1][0], c, 0)
+
     # corner
     if x == 0 and y == 0:
         u(b.x[0][0], c, 1)
@@ -105,8 +184,12 @@ def third(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises-> Bool:
         u(b.y[b.h-1][b.w], c, 1)
     #
 
-    var tf: Bool = check_cell(b, i, j, 3)
-    c = (c or tf)
+    var gets: Tuple[Bool, List[Int]] = check_cell(b, i, j, 3)
+    c = (c or gets[0])
 
-    # b.f[i][j] = True
+    var state: List[Int] = gets[1].copy()
+    sort(state)
+    if state == [0,1,1,1]:
+        b.f[i][j] = True
+
     return c

@@ -1,6 +1,6 @@
 from src.solve import Board, update_and_countup_otherwise_not as u
 
-def check_cell(mut b: Board, i: Int, j: Int, var ctrl: Int) -> Bool:
+def check_cell(mut b: Board, i: Int, j: Int, var ctrl: Int) -> Tuple[Bool, List[Int]]:
     var lines: Int = 0
     var crosses: Int = 0
     var c: Bool = False
@@ -19,16 +19,19 @@ def check_cell(mut b: Board, i: Int, j: Int, var ctrl: Int) -> Bool:
         if b.x[i+1][j] <= -1:u(b.x[i+1][j], c, 1)
         if b.y[i][j]   <= -1:u(b.y[i][j],   c, 1)
         if b.y[i][j+1] <= -1:u(b.y[i][j+1], c, 1)
-    return c
+    var around: List[Int] = [b.y[i][j+1], b.x[i][j], b.y[i][j], b.x[i+1][j]]
+    return c, around^
 
 def diagonal_neighbors(mut b: Board, i: Int, j: Int) raises -> Tuple[Int, Int, Int, Int]:
     # check inteface btw diagonally across numbers
     var convert: Dict[Tuple[Int, Int], Int] = {
         (-1, -1):-2, (-1,0):-1, (-1,1):-3,
         (0,0):0, (0,1):1, (1,1):2,
-        (-2, -2):-2, (-2,-1):-2, (-2,0):-1, (-2,1):-3,
+        (-2, -2):-6, (-2,-1):-2, (-2,0):-1, (-2,1):-3,
         (-3, -2):-2, (-3,-1):-2, (-3,0):-1, (-3,1):-3,
-        (-3, -3):-4
+        (-3, -3):-4, (-4, -4):-8,
+        (-4,-3):-2, (-4, -2):-2, (-4,-1):-2,
+        (-4,0):-1, (-4,1):-3,
     }
 
     var diag: List[Int] = []

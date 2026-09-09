@@ -57,11 +57,11 @@ def treat_vertex(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
         if y != 0 and b.y[i-1][j] <= -1:u(b.y[i-1][j], c, 1)
         if x != 1 and b.x[i][j]   <= -1:u(b.x[i][j],   c, 1)
         if y != 1 and b.y[i][j]   <= -1:u(b.y[i][j],   c, 1)
-    elif crosses == 2:
-        if x != 0 and b.x[i][j-1] == -1:u(b.x[i][j-1], c, -2)
-        if y != 0 and b.y[i-1][j] == -1:u(b.y[i-1][j], c, -2)
-        if x != 1 and b.x[i][j]   == -1:u(b.x[i][j],   c, -2)
-        if y != 1 and b.y[i][j]   == -1:u(b.y[i][j],   c, -2)
+    # elif crosses == 2:
+    #     if x != 0 and b.x[i][j-1] == -1:u(b.x[i][j-1], c, -2)
+    #     if y != 0 and b.y[i-1][j] == -1:u(b.y[i-1][j], c, -2)
+    #     if x != 1 and b.x[i][j]   == -1:u(b.x[i][j],   c, -2)
+    #     if y != 1 and b.y[i][j]   == -1:u(b.y[i][j],   c, -2)
     elif crosses == 3:
         if x != 0 and b.x[i][j-1] <= -1:u(b.x[i][j-1], c, 0)
         if y != 0 and b.y[i-1][j] <= -1:u(b.y[i-1][j], c, 0)
