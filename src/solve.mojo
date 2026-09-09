@@ -54,6 +54,7 @@ def install_board() raises -> Board:
     var size: List[Int] = [Int(i) for i in lines[0].split(",")]
     var h: Int = size[0]
     var w: Int = size[1]
+    print("h=",h,"w=",w)
 
     var row: List[Int] = [-1 for _k in range(w)]
     var row_excess: List[Int] = [-1 for _k in range(w+1)]
@@ -79,8 +80,8 @@ def install_board() raises -> Board:
     return Board(h, w, p^, x^, y^, n^, f^, l^, io^)
 
 def print_board(b: Board) raises -> None:
-    var disp_x: Dict[Int, String] = {-1:" ", 0:"x", 1:"-", -2: "?", -3:" "}
-    var disp_y: Dict[Int, String] = {-1:" ", 0:"x", 1:"|", -2: "?", -3:" "}
+    var disp_x: Dict[Int, String] = {-1:" ", 0:"x", 1:"-", -2: " ", -3:" ", -4:" "}
+    var disp_y: Dict[Int, String] = {-1:" ", 0:"x", 1:"|", -2: " ", -3:" ", -4:" "}
     var disp_n: Dict[Int, String] = {-1:" ", 0:"0", 1:"1", 2:"2", 3:"3"}
     var disp_p: Dict[Int, String] = {
         -1:"·", 0: " ", 5: "─", 6: "│",
