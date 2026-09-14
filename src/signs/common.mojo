@@ -19,6 +19,9 @@ def check_cell(mut b: Board, i: Int, j: Int, var ctrl: Int) -> Tuple[Bool, List[
         if b.x[i+1][j] <= -1:u(b.x[i+1][j], c, 1)
         if b.y[i][j]   <= -1:u(b.y[i][j],   c, 1)
         if b.y[i][j+1] <= -1:u(b.y[i][j+1], c, 1)
+    # detect contradiction
+    if lines > ctrl or crosses > 4-ctrl:
+        b.b = None
     var around: List[Int] = [b.y[i][j+1], b.x[i][j], b.y[i][j], b.x[i+1][j]]
     return c, around^
 
@@ -139,3 +142,20 @@ def check_io(mut b: Board, mut c: Bool, i: Int, j: Int):
             u(b.y[i][j+1], c, 0)
 
     c = c or (b.io[i][j] is not None)
+
+    # detect contradiction
+    if b.io[i][j] is not None:
+        var targ: Tuple[Bool, Int, Bool] = (True,-1,True)
+        if i != 0 and b.io[i-1][j] is not None:
+            targ = (b.io[i][j].value(), b.x[i][j], b.io[i-1][j].value())
+        if i != b.h-1 and b.io[i+1][j] is not None:
+            targ = (b.io[i][j].value(), b.x[i+1][j], b.io[i+1][j].value())
+        if j != 0 and b.io[i][j-1] is not None:
+            targ = (b.io[i][j].value(), b.y[i][j], b.io[i][j-1].value())
+        if j != b.w-1 and b.io[i][j+1] is not None:
+            targ = (b.io[i][j].value(), b.y[i][j+1], b.io[i][j+1].value())
+        # evaluate contradiction exist or not.
+        if targ[0] == targ[2]:
+            if targ[1] == 1:b.b = None
+        else:
+            if targ[1] == 0:b.b = None

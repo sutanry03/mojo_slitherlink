@@ -112,6 +112,7 @@ def simple_loops(var b: Board) raises -> Board:
             if init1 == (b.r[i].i1, b.r[i].j1):
                 b.r[i].i2 = b.r[i].i1
                 b.r[i].j2 = b.r[i].j1
+                b.b = None
                 break
         while True:
             var judge = extend_ring(b, b.r[i].i2, b.r[i].j2, b.r[i].d2)
@@ -119,10 +120,13 @@ def simple_loops(var b: Board) raises -> Board:
             if init2 == (b.r[i].i2, b.r[i].j2):
                 b.r[i].i1 = b.r[i].i2
                 b.r[i].j1 = b.r[i].j2
+                b.b = None
                 break
         b.r[i].close = b.r[i].check_connection()
         if b.r[i].close == 5:
-            print("LOOPED.")
+            if len(b.r) == 1:
+                print("SUCCESSFULLY LOOPED.")
+                b.b = False
             return b^
         #_ListIter[...].Element does not need to be fixed.
         if all([b.r[i] != newone for newone in newlist]):
@@ -130,8 +134,8 @@ def simple_loops(var b: Board) raises -> Board:
                 b.r[i].w, b.r[i].i1, b.r[i].j1, b.r[i].d1,
                 b.r[i].i2, b.r[i].j2, b.r[i].d2
             ))
-            var t: Ring = newlist[len(newlist) -1].copy()
-            print(t.i1, t.j1, t.d1, t.i2, t.j2, t.d2, t.close)
+            # var t: Ring = newlist[len(newlist) -1].copy()
+            # print(t.i1, t.j1, t.d1, t.i2, t.j2, t.d2, t.close)
     b.r = newlist^
 
     var ti1: Int
