@@ -1,6 +1,6 @@
 from src.solve import Board, update_and_countup_otherwise_not as u
 
-def simple_points(var b: Board) raises -> Board:
+def simple_points(var b: Board, printout: Bool=True) raises -> Board:
     var cnt: Bool = False
     for i in range(b.h+1):
         var yedge: Int
@@ -18,8 +18,9 @@ def simple_points(var b: Board) raises -> Board:
             cnt = cnt or temp
     if cnt:
         b.b = True
-        print("Iteration (points) begin.")
-        b = simple_points(b^)
+        if printout:
+            print("Iteration (points) begin.")
+        b = simple_points(b^, printout)
     return b^
 
 def treat_vertex(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
@@ -57,11 +58,6 @@ def treat_vertex(mut b: Board, i: Int, j: Int, x: Int, y: Int) raises -> Bool:
         if y != 0 and b.y[i-1][j] <= -1:u(b.y[i-1][j], c, 1)
         if x != 1 and b.x[i][j]   <= -1:u(b.x[i][j],   c, 1)
         if y != 1 and b.y[i][j]   <= -1:u(b.y[i][j],   c, 1)
-    # elif crosses == 2:
-    #     if x != 0 and b.x[i][j-1] == -1:u(b.x[i][j-1], c, -2)
-    #     if y != 0 and b.y[i-1][j] == -1:u(b.y[i-1][j], c, -2)
-    #     if x != 1 and b.x[i][j]   == -1:u(b.x[i][j],   c, -2)
-    #     if y != 1 and b.y[i][j]   == -1:u(b.y[i][j],   c, -2)
     elif crosses == 3:
         if x != 0 and b.x[i][j-1] <= -1:u(b.x[i][j-1], c, 0)
         if y != 0 and b.y[i-1][j] <= -1:u(b.y[i-1][j], c, 0)

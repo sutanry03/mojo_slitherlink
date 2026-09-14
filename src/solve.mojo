@@ -1,8 +1,9 @@
 from src.numbers import simple_numbering
 from src.points import simple_points
 from src.loops import Ring, simple_loops
+from src.trial import hypothesis
 
-struct Board:
+struct Board(Copyable):
     var h: Int                           # height of board
     var w: Int                           # width of board
     var p: List[List[Int]]               # points around numbers
@@ -10,7 +11,7 @@ struct Board:
     var y: List[List[Int]]               # vertical lines
     var n: List[List[Int]]               # numbers given by problem
     var f: List[List[Bool]]              # flag for number
-    var b: Bool                          # bool for record update or not
+    var b: Optional[Bool]                # bool for record update or not
     var l: Dict[String, List[List[Int]]] # loops numbers belongs to.
     var r: List[Ring]                    # rings catalog.
     var io: List[List[Optional[Bool]]]   # record whether In or Out.
@@ -58,19 +59,19 @@ def install_board() raises -> Board:
 
     var row: List[Int] = [-1 for _k in range(w)]
     var row_excess: List[Int] = [-1 for _k in range(w+1)]
-    var row_io: List[Optional[Bool]] = [None for _k in range(w)]
+    var row_none: List[Optional[Bool]] = [None for _k in range(w)]
+    var row_bools: List[Bool] = [False for _k in range(w)]
     for line in lines[1:]:
         var row_n: List[Int] = [Int(j) if j else -1 for j in line.split(",")]
         n.append(row_n^)
-        var flgs: List[Bool] = [False for _k in range(w)]
-        f.append(flgs^)
 
         x.append(row.copy())
         y.append(row_excess.copy())
         p.append(row_excess.copy())
+        f.append(row_bools.copy())
         l["x"].append(row.copy())
         l["y"].append(row_excess.copy())
-        io.append(row_io.copy())
+        io.append(row_none.copy())
 
     x.append(row.copy())
     l["x"].append(row.copy())
@@ -114,29 +115,37 @@ def update_and_countup_otherwise_not(mut v: Int, mut c: Bool, desire: Int):
         v = desire
     c = c or diff
 
-def numbers_and_points(var board_map: Board) raises -> Board:
+def scenarios(var board_map: Board) raises -> Board:
     board_map = simple_numbering(board_map^)
     print_board(board_map)
     board_map = simple_points(board_map^)
     print_board(board_map)
-    if board_map.b:
+    if board_map.b.value():
         print("Retake numbers&points set.")
         board_map.b = False
-        board_map = numbers_and_points(board_map^)
+        board_map = scenarios(board_map^)
     else:
         print("Through numbers&points set. Begin loop_check.")
         board_map = simple_loops(board_map^)
         print_board(board_map)
-    if board_map.b:
+    if board_map.b.value():
         print("Change detected. Retake trio set.")
         board_map.b = False
-        board_map = numbers_and_points(board_map^)
+        board_map = scenarios(board_map^)
+    else:
+        print("Trio set has done. Begin hypothesis_check.")
+        board_map = hypothesis(board_map^)
+        print_board(board_map)
+    if board_map.b.value():
+        print("invalid hypothesis detected. Retake solving.")
+        board_map.b = False
+        board_map = scenarios(board_map^)
     return board_map^
 
 def solve() raises:
     # install question
     var board_map: Board = install_board()
     print_board(board_map)
-    board_map = numbers_and_points(board_map^)
-    print("Through simple-trio set.")
+    board_map = scenarios(board_map^)
+    print("Total Scenarios has been completed.")
     print(board_map.h, board_map.w, len(board_map.r))
